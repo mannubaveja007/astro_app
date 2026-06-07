@@ -35,7 +35,13 @@ export function HomeScreenView({
       />
 
       {/* Reader Card */}
-      <Animated.View entering={FadeInDown.delay(100).duration(400)} style={styles.card}>
+      <Animated.View entering={FadeInDown.delay(100).duration(400)} style={[styles.card, styles.readerCard]}>
+        <LinearGradient
+          colors={['#FFFDFB', '#FAF7F2']}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 1 }}
+          style={StyleSheet.absoluteFill}
+        />
         <View style={styles.readerHeader}>
           <View style={styles.avatarContainer}>
             <AvatarPulse />
@@ -60,6 +66,12 @@ export function HomeScreenView({
       {/* Countdown timer card */}
       <View style={{ position: 'relative', alignItems: 'center', width: '100%' }}>
         <Animated.View entering={FadeInDown.delay(200).duration(400)} style={[styles.card, styles.countdownCard]}>
+          <LinearGradient
+            colors={['#FFFDFB', '#FAF8F3']}
+            start={{ x: 0.5, y: 0 }}
+            end={{ x: 0.5, y: 1 }}
+            style={StyleSheet.absoluteFill}
+          />
           <Text style={styles.countdownLabel}>YOUR SKETCH WILL BE READY IN</Text>
           
           {(() => {
@@ -98,7 +110,9 @@ export function HomeScreenView({
             {expedited ? 'Expedited to 12 Hours ✦' : 'Expedite Your Reading to 12 Hours'}
           </Text>
         </Pressable>
-        <Text style={styles.inProgressText}>Your reading is in progress ✦</Text>
+        <View style={styles.inProgressBadge}>
+          <Text style={styles.inProgressText}>✦ Reading in progress · Alignment ongoing ✦</Text>
+        </View>
       </Animated.View>
 
       {/* Divider */}
@@ -234,11 +248,17 @@ const styles = StyleSheet.create({
     color: Colors.light.textSecondary,
     fontWeight: '400',
   },
+  readerCard: {
+    borderLeftWidth: 3,
+    borderLeftColor: Colors.light.gold,
+    boxShadow: '0 4px 12px rgba(108, 82, 153, 0.03)',
+  },
   countdownCard: {
     alignItems: 'center',
     paddingVertical: 24,
     borderColor: Colors.light.borderGlow,
     backgroundColor: Colors.light.backgroundElement,
+    boxShadow: '0 8px 24px rgba(197, 155, 39, 0.08)',
   },
   countdownLabel: {
     fontSize: 9,
@@ -253,35 +273,41 @@ const styles = StyleSheet.create({
     fontWeight: '400',
   },
   btnPrimary: {
-    backgroundColor: Colors.light.text,
+    backgroundColor: Colors.light.gold,
     height: 44,
     borderRadius: 12,
     alignItems: 'center',
     justifyContent: 'center',
-    shadowColor: Colors.light.text,
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.1,
-    shadowRadius: 12,
-    elevation: 2,
+    boxShadow: '0 4px 12px rgba(197, 155, 39, 0.15)',
   },
   btnPrimaryPressed: {
     transform: [{ scale: 0.98 }],
-    backgroundColor: '#2e241e',
+    backgroundColor: '#A8811F',
   },
   btnDisabled: {
     opacity: 0.5,
   },
   btnText: {
-    color: Colors.light.backgroundElement,
+    color: '#FFFDFB',
     fontSize: 13,
     fontWeight: '600',
   },
-  inProgressText: {
-    fontSize: 11,
-    color: Colors.light.textSecondary,
-    textAlign: 'center',
+  inProgressBadge: {
+    alignSelf: 'center',
     marginTop: 12,
-    fontWeight: '500',
+    backgroundColor: '#FDF9F2',
+    borderWidth: 1,
+    borderColor: 'rgba(197, 155, 39, 0.15)',
+    paddingVertical: 4,
+    paddingHorizontal: 10,
+    borderRadius: 12,
+  },
+  inProgressText: {
+    fontSize: 9.5,
+    color: Colors.light.gold,
+    fontWeight: '600',
+    letterSpacing: 0.5,
+    textTransform: 'uppercase',
   },
   divider: {
     flexDirection: 'row',
