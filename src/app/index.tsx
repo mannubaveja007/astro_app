@@ -3,7 +3,6 @@ import {
   View,
   Text,
   StyleSheet,
-  Dimensions,
   Alert,
   Clipboard,
   Pressable,
@@ -14,7 +13,6 @@ import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context'
 import * as Haptics from 'expo-haptics';
 import Animated, {
   useSharedValue,
-  useAnimatedStyle,
   withTiming,
   Easing,
   FadeIn,
@@ -34,7 +32,6 @@ import { ReportScreenView } from '@/screens/report-screen';
 import { JourneyScreenView } from '@/screens/journey-screen';
 import { SupportScreenView } from '@/screens/support-screen';
 
-const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
 // Twinkling stars dataset (fixed coordinate values for render purity)
 const STARS_COUNT = 25;
@@ -47,7 +44,7 @@ const STARS_LIST = Array.from({ length: STARS_COUNT }, (_, i) => ({
 
 export default function HomeScreen() {
   const insets = useSafeAreaInsets();
-  const [activeTab, setActiveTab] = useState<'home' | 'readings' | 'chat' | 'journey' | 'you'>('home');
+  const [activeTab, setActiveTab] = useState<'home' | 'readings' | 'chat' | 'journey' | 'you'>('readings');
   const [supportVisible, setSupportVisible] = useState(false);
   const [chatDialogVisible, setChatDialogVisible] = useState(false);
   const [dayModalVisible, setDayModalVisible] = useState(false);

@@ -223,7 +223,7 @@ export function JourneyScreenView({
 const styles = StyleSheet.create({
   scrollContent: {
     padding: 16,
-    paddingBottom: 110,
+    paddingBottom: 130,
     gap: 16,
   },
   card: {

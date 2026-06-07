@@ -279,7 +279,7 @@ export function ChatScreenView({
 const styles = StyleSheet.create({
   scrollContent: {
     padding: 16,
-    paddingBottom: 110,
+    paddingBottom: 130,
     gap: 16,
     flexGrow: 1,
   },
@@ -702,7 +702,7 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     right: 0,
-    height: 70,
+    paddingTop: 8,
     borderTopWidth: 1,
     borderTopColor: Colors.light.border,
     paddingHorizontal: 16,
