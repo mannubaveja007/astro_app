@@ -58,6 +58,6 @@ export function Star({ top, left, size }: StarProps) {
 const styles = StyleSheet.create({
   star: {
     position: 'absolute',
-    backgroundColor: Colors.light.gold,
+    backgroundColor: 'rgba(235, 225, 205, 0.45)',
   },
 });

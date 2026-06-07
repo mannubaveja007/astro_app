@@ -72,13 +72,7 @@ export function CelestialBackground() {
 
       <Animated.View style={[styles.celestialRing, styles.ringInner, ringStyle3]} />
 
-      {/* Axis text anchors */}
-      <View style={styles.axisLabelContainer}>
-        <Text style={[styles.axisLabelText, { top: 60, left: '50%', transform: [{ translateX: -12 }] }]}>MC</Text>
-        <Text style={[styles.axisLabelText, { bottom: 100, left: '50%', transform: [{ translateX: -10 }] }]}>IC</Text>
-        <Text style={[styles.axisLabelText, { left: 20, top: '50%', transform: [{ translateY: -10 }] }]}>ASC</Text>
-        <Text style={[styles.axisLabelText, { right: 20, top: '50%', transform: [{ translateY: -10 }] }]}>DSC</Text>
-      </View>
+
     </View>
   );
 }
@@ -179,16 +173,5 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     color: 'rgba(197, 155, 39, 0.2)',
     letterSpacing: 0.5,
-  },
-  axisLabelContainer: {
-    position: 'absolute',
-    inset: 0,
-  },
-  axisLabelText: {
-    position: 'absolute',
-    fontSize: 8,
-    fontWeight: '700',
-    color: 'rgba(122, 111, 102, 0.3)',
-    letterSpacing: 1,
   },
 });

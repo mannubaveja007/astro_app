@@ -48,9 +48,9 @@ const STARS_LIST = Array.from({ length: STARS_COUNT }, (_, i) => ({
 
 export default function HomeScreen() {
   const insets = useSafeAreaInsets();
-  const [activeTab, setActiveTab] = useState<'home' | 'readings' | 'chat' | 'journey' | 'you'>('chat');
+  const [activeTab, setActiveTab] = useState<'home' | 'readings' | 'chat' | 'journey' | 'you'>('home');
   const [supportVisible, setSupportVisible] = useState(false);
-  const [chatDialogVisible, setChatDialogVisible] = useState(true);
+  const [chatDialogVisible, setChatDialogVisible] = useState(false);
   const [dayModalVisible, setDayModalVisible] = useState(false);
 
   // States
@@ -222,18 +222,22 @@ export default function HomeScreen() {
       <SafeAreaView style={styles.headerSafeArea} edges={['top']}>
         <View style={styles.topBar}>
           <View style={styles.topBarLeft}>
-            <Text style={styles.topBarTitle}>
+            <Text style={styles.topBarTitle}>astro</Text>
+            <Text style={styles.topBarPlus}>+</Text>
+          </View>
+
+          <View style={styles.topBarCenter}>
+            <Text style={styles.topBarSectionText}>
               {activeTab === 'home'
-                ? 'astro'
+                ? 'Daily'
                 : activeTab === 'readings'
                 ? 'Readings'
                 : activeTab === 'chat'
                 ? 'Chat'
                 : activeTab === 'journey'
-                ? '30-Day Journey'
+                ? 'Guides'
                 : 'You'}
             </Text>
-            {activeTab === 'home' && <Text style={styles.topBarPlus}>+</Text>}
           </View>
 
           <View style={styles.topBarRight}>
@@ -244,7 +248,7 @@ export default function HomeScreen() {
               }}
               style={({ pressed }) => [styles.headerButton, pressed && styles.headerButtonPressed]}
               hitSlop={8}>
-              <Ionicons name="help-circle-outline" size={20} color={Colors.light.textSecondary} />
+              <Ionicons name="help-circle-outline" size={18} color={Colors.light.textSecondary} />
             </Pressable>
             
             <Pressable
@@ -252,9 +256,13 @@ export default function HomeScreen() {
                 Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
                 setActiveTab('you');
               }}
-              style={({ pressed }) => [styles.headerButton, pressed && styles.headerButtonPressed]}
+              style={({ pressed }) => [
+                styles.headerButton,
+                activeTab === 'you' && styles.headerButtonActive,
+                pressed && styles.headerButtonPressed
+              ]}
               hitSlop={8}>
-              <Ionicons name="person-outline" size={18} color={Colors.light.textSecondary} />
+              <Ionicons name="person-outline" size={18} color={activeTab === 'you' ? Colors.light.violet : Colors.light.textSecondary} />
             </Pressable>
           </View>
         </View>
@@ -356,8 +364,8 @@ export default function HomeScreen() {
       {/* PERSISTENT BOTTOM NAVIGATION BAR */}
       {/* ==================================================== */}
       <View style={[styles.bottomBar, { paddingBottom: insets.bottom + 8 }]}>
-        {/* Custom animated pill behind active tab */}
-        <Animated.View style={[styles.tabIndicatorPill, { width: tabPillWidth }, animatedIndicatorStyle]} />
+        {/* Custom animated dash below active tab */}
+        <Animated.View style={[styles.tabIndicatorPill, { width: 12, left: (tabPillWidth - 12) / 2 }, animatedIndicatorStyle]} />
 
         {/* Home Tab */}
         <Pressable
@@ -368,7 +376,7 @@ export default function HomeScreen() {
           style={styles.tabItem}>
           <Ionicons
             name={activeTab === 'home' ? 'home' : 'home-outline'}
-            size={18}
+            size={20}
             color={activeTab === 'home' ? Colors.light.violet : Colors.light.textSecondary}
           />
           <Text style={[styles.tabText, activeTab === 'home' && styles.tabTextActive]}>Home</Text>
@@ -383,7 +391,7 @@ export default function HomeScreen() {
           style={styles.tabItem}>
           <Ionicons
             name={activeTab === 'readings' ? 'book' : 'book-outline'}
-            size={18}
+            size={20}
             color={activeTab === 'readings' ? Colors.light.violet : Colors.light.textSecondary}
           />
           <Text style={[styles.tabText, activeTab === 'readings' && styles.tabTextActive]}>Readings</Text>
@@ -398,7 +406,7 @@ export default function HomeScreen() {
           style={styles.tabItem}>
           <Ionicons
             name={activeTab === 'chat' ? 'chatbubble-ellipses' : 'chatbubble-ellipses-outline'}
-            size={18}
+            size={20}
             color={activeTab === 'chat' ? Colors.light.violet : Colors.light.textSecondary}
           />
           <Text style={[styles.tabText, activeTab === 'chat' && styles.tabTextActive]}>Chat</Text>
@@ -413,7 +421,7 @@ export default function HomeScreen() {
           style={styles.tabItem}>
           <Ionicons
             name={activeTab === 'journey' ? 'triangle' : 'triangle-outline'}
-            size={18}
+            size={20}
             color={activeTab === 'journey' ? Colors.light.violet : Colors.light.textSecondary}
           />
           <Text style={[styles.tabText, activeTab === 'journey' && styles.tabTextActive]}>Guides</Text>
@@ -428,7 +436,7 @@ export default function HomeScreen() {
           style={styles.tabItem}>
           <Ionicons
             name={activeTab === 'you' ? 'person' : 'person-outline'}
-            size={18}
+            size={20}
             color={activeTab === 'you' ? Colors.light.violet : Colors.light.textSecondary}
           />
           <Text style={[styles.tabText, activeTab === 'you' && styles.tabTextActive]}>You</Text>
@@ -474,6 +482,21 @@ const styles = StyleSheet.create({
     marginLeft: 2,
     alignSelf: 'flex-start',
   },
+  topBarCenter: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    alignItems: 'center',
+    justifyContent: 'center',
+    zIndex: -1, // Keep behind buttons for clicks
+  },
+  topBarSectionText: {
+    fontSize: 10,
+    fontWeight: '700',
+    letterSpacing: 1.5,
+    textTransform: 'uppercase',
+    color: Colors.light.textSecondary,
+  },
   topBarRight: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -488,6 +511,10 @@ const styles = StyleSheet.create({
     borderColor: Colors.light.border,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  headerButtonActive: {
+    borderColor: 'rgba(108, 82, 153, 0.2)',
+    backgroundColor: 'rgba(108, 82, 153, 0.04)',
   },
   headerButtonPressed: {
     backgroundColor: '#f0eae0',
@@ -596,10 +623,10 @@ const styles = StyleSheet.create({
   },
   tabIndicatorPill: {
     position: 'absolute',
-    top: 4,
-    bottom: 4,
-    backgroundColor: 'rgba(108, 82, 153, 0.04)',
-    borderRadius: 12,
+    bottom: 5,
+    height: 3,
+    backgroundColor: Colors.light.violet,
+    borderRadius: 1.5,
   },
   tabItem: {
     flex: 1,
