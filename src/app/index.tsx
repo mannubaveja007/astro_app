@@ -348,10 +348,7 @@ export default function HomeScreen() {
       {/* ==================================================== */}
       {/* PERSISTENT BOTTOM NAVIGATION BAR */}
       {/* ==================================================== */}
-      <View style={[styles.bottomBar, { paddingBottom: insets.bottom + 8 }]}>
-        {/* Custom animated dash below active tab */}
-        <Animated.View style={[styles.tabIndicatorPill, { width: 12, left: (tabPillWidth - 12) / 2 }, animatedIndicatorStyle]} />
-
+      <View style={[styles.bottomBar, { paddingBottom: insets.bottom, height: 52 + insets.bottom }]}>
         {/* Home Tab */}
         <Pressable
           onPress={() => {
@@ -359,6 +356,7 @@ export default function HomeScreen() {
             setActiveTab('home');
           }}
           style={styles.tabItem}>
+          {activeTab === 'home' && <View style={styles.activeDot} />}
           <Ionicons
             name={activeTab === 'home' ? 'home' : 'home-outline'}
             size={20}
@@ -374,6 +372,7 @@ export default function HomeScreen() {
             setActiveTab('readings');
           }}
           style={styles.tabItem}>
+          {activeTab === 'readings' && <View style={styles.activeDot} />}
           <Ionicons
             name={activeTab === 'readings' ? 'book' : 'book-outline'}
             size={20}
@@ -389,6 +388,7 @@ export default function HomeScreen() {
             setActiveTab('chat');
           }}
           style={styles.tabItem}>
+          {activeTab === 'chat' && <View style={styles.activeDot} />}
           <Ionicons
             name={activeTab === 'chat' ? 'chatbubble-ellipses' : 'chatbubble-ellipses-outline'}
             size={20}
@@ -404,6 +404,7 @@ export default function HomeScreen() {
             setActiveTab('journey');
           }}
           style={styles.tabItem}>
+          {activeTab === 'journey' && <View style={styles.activeDot} />}
           <Ionicons
             name={activeTab === 'journey' ? 'triangle' : 'triangle-outline'}
             size={20}
@@ -419,6 +420,7 @@ export default function HomeScreen() {
             setActiveTab('you');
           }}
           style={styles.tabItem}>
+          {activeTab === 'you' && <View style={styles.activeDot} />}
           <Ionicons
             name={activeTab === 'you' ? 'person' : 'person-outline'}
             size={20}
@@ -427,6 +429,7 @@ export default function HomeScreen() {
           <Text style={[styles.tabText, activeTab === 'you' && styles.tabTextActive]}>You</Text>
         </Pressable>
       </View>
+
     </View>
   );
 }
@@ -596,8 +599,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   bottomBar: {
-    height: 60,
-    backgroundColor: 'rgba(255, 253, 251, 0.95)',
+    backgroundColor: 'rgba(255, 253, 251, 0.96)',
     borderTopWidth: 1,
     borderTopColor: Colors.light.border,
     flexDirection: 'row',
@@ -606,26 +608,32 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
   },
-  tabIndicatorPill: {
-    position: 'absolute',
-    bottom: 5,
-    height: 3,
-    backgroundColor: Colors.light.violet,
-    borderRadius: 1.5,
-  },
   tabItem: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 2,
+    height: 52,
+    paddingTop: 6,
+    paddingBottom: 2,
+    position: 'relative',
     zIndex: 10,
   },
   tabText: {
-    fontSize: 9,
+    fontSize: 10,
     fontWeight: '500',
     color: Colors.light.textSecondary,
+    marginTop: 1,
   },
   tabTextActive: {
     color: Colors.light.violet,
+    fontWeight: '600',
+  },
+  activeDot: {
+    position: 'absolute',
+    top: 2,
+    width: 4,
+    height: 4,
+    borderRadius: 2,
+    backgroundColor: Colors.light.violet,
   },
 });
