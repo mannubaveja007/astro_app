@@ -25,10 +25,10 @@ export function ReadingsScreenView({
       
       {/* Banner */}
       <View style={styles.readyBanner}>
-        <Text style={styles.readyIcon}>🎉</Text>
+        <Text style={styles.readyIcon}>🪐</Text>
         <View style={styles.readyTextGroup}>
-          <Text style={styles.readyTitle}>Ready! Your complete reading</Text>
-          <Text style={styles.readySub}>Progress shown for all · unlock instantly</Text>
+          <Text style={styles.readyTitle}>Your Soul Portrait is Aligned</Text>
+          <Text style={styles.readySub}>Your past life insights are ready to be read</Text>
         </View>
       </View>
 
@@ -37,9 +37,15 @@ export function ReadingsScreenView({
         <Text style={styles.sectionTitle}>UNLOCKED READINGS</Text>
         <View style={styles.sectionDivider} />
 
-        <Animated.View style={styles.card}>
+        <Animated.View style={[styles.card, styles.unlockedCard]}>
+          <LinearGradient
+            colors={['#FFFDFB', '#FAF7F2']}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 1 }}
+            style={StyleSheet.absoluteFill}
+          />
           <View style={styles.unlockedRow}>
-            <Text style={styles.unlockedEmoji}>🌿</Text>
+            <Text style={styles.unlockedEmoji}>🌙</Text>
             <View style={styles.unlockedBadge}>
               <Text style={styles.unlockedBadgeText}>Unlocked</Text>
             </View>
@@ -60,7 +66,7 @@ export function ReadingsScreenView({
               Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
               setPastLifeExpanded(!pastLifeExpanded);
             }}
-            style={({ pressed }) => [styles.btnReadNow, pressed && { opacity: 0.7 }]}>
+            style={({ pressed }) => [styles.btnReadNow, pressed && { opacity: 0.8 }]}>
             <Text style={styles.btnReadNowText}>{pastLifeExpanded ? 'Close read ↑' : 'Read now ↓'}</Text>
           </Pressable>
         </Animated.View>
@@ -77,13 +83,15 @@ export function ReadingsScreenView({
               key={index}
               onPress={() => Alert.alert('✦ Reading Locked ✦', `Your "${item.type}" reading is currently being aligned. Complete your current Daily Journey exercises or expedite to unlock instantly.`)}
               style={({ pressed }) => [styles.lockedCard, pressed && styles.cardPressed]}>
-              <Text style={styles.lockedIcon}>{item.icon}</Text>
+              <View style={styles.lockedIconContainer}>
+                <Text style={styles.lockedIcon}>{item.icon}</Text>
+              </View>
               <View style={styles.lockedInfo}>
                 <Text style={styles.lockedTitle}>{item.title}</Text>
-                <Text style={styles.lockedSub}>{item.type}</Text>
+                <Text style={styles.lockedSub}>{item.type} · Channeling...</Text>
               </View>
               <View style={styles.lockBadge}>
-                <Ionicons name="lock-closed" size={10} color={Colors.light.textSecondary} />
+                <Ionicons name="lock-closed" size={10} color={Colors.light.gold} />
               </View>
             </Pressable>
           ))}
