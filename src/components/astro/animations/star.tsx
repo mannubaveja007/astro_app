@@ -8,7 +8,7 @@ import Animated, {
   withTiming,
   Easing,
 } from 'react-native-reanimated';
-import { Colors } from '@/constants/theme';
+
 
 interface StarProps {
   top: number;

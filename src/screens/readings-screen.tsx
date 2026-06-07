@@ -3,6 +3,7 @@ import { StyleSheet, View, Text, Pressable, Alert } from 'react-native';
 import Animated, { FadeIn } from 'react-native-reanimated';
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
+import { LinearGradient } from 'expo-linear-gradient';
 import { Colors } from '@/constants/theme';
 import { LOCKED_READINGS } from '@/constants/astro-data';
 

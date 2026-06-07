@@ -3,6 +3,7 @@ import { StyleSheet, View, Text, Pressable, Alert } from 'react-native';
 import Animated, { FadeIn, FadeInDown, SharedValue, Layout } from 'react-native-reanimated';
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
+import { LinearGradient } from 'expo-linear-gradient';
 import { Colors } from '@/constants/theme';
 import { ActiveNode } from '@/components/astro/animations/active-node';
 import { ParticleBurst } from '@/components/astro/animations/particle-burst';
