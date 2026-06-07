@@ -469,6 +469,11 @@ export default function HomeScreen() {
   // Layout Animation Variables
   const tabPillWidth = (SCREEN_WIDTH - 24) / 5;
   const tabIndicatorOffset = useSharedValue(0);
+  
+  // Animation triggers
+  const countdownBurstProgress = useSharedValue(0);
+  const journeyBurstProgress = useSharedValue(0);
+  const chatScrollViewRef = useRef<ScrollView>(null);
 
   // Twinkling stars dataset (fixed random coordinates)
   const [stars] = useState(() =>
@@ -521,6 +526,10 @@ export default function HomeScreen() {
     Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
     setExpedited(true);
 
+    // Initial burst
+    countdownBurstProgress.value = 0;
+    countdownBurstProgress.value = withTiming(1, { duration: 1000, easing: Easing.out(Easing.quad) });
+
     // Roll countdown value down to 11:59:59
     const target = 11 * 3600 + 59 * 60 + 59;
     let current = countdownSeconds;
@@ -532,6 +541,9 @@ export default function HomeScreen() {
       if (current <= target || counter >= 24) {
         setCountdownSeconds(target);
         clearInterval(interval);
+        // Final burst on completion
+        countdownBurstProgress.value = 0;
+        countdownBurstProgress.value = withTiming(1, { duration: 1000, easing: Easing.out(Easing.quad) });
       } else {
         setCountdownSeconds(current);
       }
@@ -601,6 +613,10 @@ export default function HomeScreen() {
     setJourneyProgress(0.2); // Fills progress bar to 20%
     setJourneyUnlockedCount(6);
     setDayModalVisible(false);
+
+    // Trigger journey particles celebration
+    journeyBurstProgress.value = 0;
+    journeyBurstProgress.value = withTiming(1, { duration: 1200, easing: Easing.out(Easing.quad) });
   };
 
   // Copy support email
@@ -612,8 +628,9 @@ export default function HomeScreen() {
 
   return (
     <View style={styles.container}>
-      {/* Background Star field */}
-      <View style={StyleSheet.absoluteFill}>
+      {/* Celestial Background & Star field */}
+      <View style={StyleSheet.absoluteFill} pointerEvents="none">
+        <CelestialBackground />
         {stars.map((star) => (
           <Star key={star.id} top={star.top} left={star.left} size={star.size} delay={star.delay} />
         ))}
@@ -682,7 +699,7 @@ export default function HomeScreen() {
             <Animated.View entering={FadeInDown.delay(100).duration(400)} style={styles.card}>
               <View style={styles.readerHeader}>
                 <View style={styles.avatarContainer}>
-                  <View style={styles.avatarPulse} />
+                  <AvatarPulse />
                   <LinearGradient colors={['#6C5299', '#C59B27']} style={styles.avatarGradient}>
                     <Ionicons name="moon" size={20} color="#FFFDFB" />
                   </LinearGradient>
@@ -702,13 +719,32 @@ export default function HomeScreen() {
             </Animated.View>
 
             {/* Countdown timer card */}
-            <Animated.View entering={FadeInDown.delay(200).duration(400)} style={[styles.card, styles.countdownCard]}>
-              <Text style={styles.countdownLabel}>YOUR SKETCH WILL BE READY IN</Text>
-              <Text style={styles.countdownTime}>{formatTimer(countdownSeconds)}</Text>
-              <Text style={styles.countdownStatus}>
-                {expedited ? 'Reading expedited: Alyssa is channeling actively.' : 'Alyssa is channeling your reading…'}
-              </Text>
-            </Animated.View>
+            <View style={{ position: 'relative', alignItems: 'center', width: '100%' }}>
+              <Animated.View entering={FadeInDown.delay(200).duration(400)} style={[styles.card, styles.countdownCard]}>
+                <Text style={styles.countdownLabel}>YOUR SKETCH WILL BE READY IN</Text>
+                
+                {(() => {
+                  const hrs = Math.floor(countdownSeconds / 3600);
+                  const mins = Math.floor((countdownSeconds % 3600) / 60);
+                  const secs = countdownSeconds % 60;
+                  const pad = (n: number) => String(n).padStart(2, '0');
+                  return (
+                    <View style={styles.timerContainer}>
+                      <TimerSegment value={pad(hrs)} label="hours" />
+                      <Text style={styles.timerSeparator}>:</Text>
+                      <TimerSegment value={pad(mins)} label="mins" />
+                      <Text style={styles.timerSeparator}>:</Text>
+                      <TimerSegment value={pad(secs)} label="secs" />
+                    </View>
+                  );
+                })()}
+
+                <Text style={styles.countdownStatus}>
+                  {expedited ? 'Reading expedited: Alyssa is channeling actively.' : 'Alyssa is channeling your reading…'}
+                </Text>
+              </Animated.View>
+              <ParticleBurst progress={countdownBurstProgress} />
+            </View>
 
             {/* Expedite button */}
             <Animated.View entering={FadeInDown.delay(300).duration(400)}>
