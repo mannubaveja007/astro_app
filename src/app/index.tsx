@@ -310,7 +310,7 @@ export default function HomeScreen() {
             journeyBurstProgress={journeyBurstProgress}
           />
         )}
-        {activeTab === 'you' && <ReportScreenView />}
+        {activeTab === 'you' && <ReportScreenView setActiveTab={setActiveTab} />}
       </View>
 
       {/* Support screen modal */}

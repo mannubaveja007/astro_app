@@ -2,9 +2,15 @@ import React from 'react';
 import { StyleSheet, View, Text, Pressable, Alert } from 'react-native';
 import Animated, { FadeIn } from 'react-native-reanimated';
 import { Ionicons } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
+import * as Haptics from 'expo-haptics';
 import { Colors } from '@/constants/theme';
 
-export function ReportScreenView() {
+interface ReportScreenProps {
+  setActiveTab: (tab: 'home' | 'readings' | 'chat' | 'journey' | 'you') => void;
+}
+
+export function ReportScreenView({ setActiveTab }: ReportScreenProps) {
   return (
     <Animated.ScrollView
       entering={FadeIn.duration(400)}
@@ -13,13 +19,19 @@ export function ReportScreenView() {
       
       {/* User Profile Info */}
       <View style={styles.profileCard}>
+        <LinearGradient
+          colors={['#FFFDFB', '#FAF7F2']}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 1 }}
+          style={StyleSheet.absoluteFill}
+        />
         <View style={styles.profileAvatar}>
           <Ionicons name="compass" size={24} color={Colors.light.gold} />
         </View>
         <View style={styles.profileDetails}>
           <Text style={styles.profileName}>Alex B.</Text>
           <Text style={styles.profileDate}>11 Sep 1994 · The Truth Seeker</Text>
-          <Text style={styles.profileCosmic}>♎ Libra Sun ● ♒ Aquarius Moon ● ♊ Gemini Rising</Text>
+          <Text style={styles.profileCosmic}>♎ Libra Sun · ♒ Aquarius Moon · ♊ Gemini Rising</Text>
         </View>
         <Pressable
           onPress={() => Alert.alert('Edit Profile', 'Birth configuration editing is currently restricted.')}
@@ -30,6 +42,12 @@ export function ReportScreenView() {
 
       {/* Numerology Card */}
       <View style={styles.card}>
+        <LinearGradient
+          colors={['#FFFDFB', '#FAF8F3']}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 1 }}
+          style={StyleSheet.absoluteFill}
+        />
         <View style={styles.numerologyHeader}>
           <View style={styles.emblemContainer}>
             <View style={styles.emblemCircleInner} />
@@ -41,7 +59,7 @@ export function ReportScreenView() {
           </View>
         </View>
         <Text style={styles.numerologyBio}>
-          Deep seeking, spiritual insight, and inner wisdom define your path. This year encourages you to integrate your analytical intellect with your core intuition, revealing hidden answers.
+          Deep seeking, spiritual insight, and inner wisdom define your path. This year encourages you to integrate your analytical intellect with your core intuition, revealing hidden answers and aligning you with your soulmate transits.
         </Text>
       </View>
 
@@ -71,6 +89,29 @@ export function ReportScreenView() {
           <Text style={styles.cosmicCellLabel}>Personal No.</Text>
           <Text style={styles.cosmicCellNumber}>6</Text>
         </View>
+      </View>
+
+      {/* Next Step Insight Card */}
+      <View style={[styles.card, styles.insightCard]}>
+        <LinearGradient
+          colors={['#FFFDFB', '#FAF7FC']}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 1 }}
+          style={StyleSheet.absoluteFill}
+        />
+        <Text style={styles.insightLabel}>YOUR NEXT SPIRITUAL STEP</Text>
+        <Text style={styles.insightTitle}>Aligning with your destiny</Text>
+        <Text style={styles.insightText}>
+          Your seekers path 7 indicates a powerful period of introspection. To continue aligning with your soulmate timeline, complete your Day 3 journaling reflection.
+        </Text>
+        <Pressable
+          onPress={() => {
+            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+            setActiveTab('journey');
+          }}
+          style={({ pressed }) => [styles.btnPrimary, styles.insightBtn, pressed && styles.btnPrimaryPressed]}>
+          <Text style={styles.insightBtnText}>Continue Journey →</Text>
+        </Pressable>
       </View>
 
     </Animated.ScrollView>
@@ -259,5 +300,62 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     color: Colors.light.text,
     marginTop: 4,
+  },
+  insightCard: {
+    borderTopWidth: 3,
+    borderTopColor: Colors.light.gold,
+    marginTop: 8,
+    marginBottom: 20,
+    boxShadow: '0 4px 12px rgba(108, 82, 153, 0.03)',
+  },
+  insightLabel: {
+    fontSize: 8.5,
+    fontWeight: '700',
+    letterSpacing: 1.5,
+    color: Colors.light.textSecondary,
+    marginBottom: 4,
+    zIndex: 2,
+  },
+  insightTitle: {
+    fontFamily: 'ui-serif',
+    fontSize: 15,
+    fontWeight: '600',
+    color: Colors.light.text,
+    zIndex: 2,
+    marginBottom: 8,
+  },
+  insightText: {
+    fontSize: 11,
+    color: Colors.light.textSecondary,
+    lineHeight: 16,
+    zIndex: 2,
+    marginBottom: 16,
+  },
+  insightBtn: {
+    height: 38,
+    borderRadius: 10,
+    alignSelf: 'flex-start',
+    paddingHorizontal: 16,
+    zIndex: 2,
+  },
+  insightBtnText: {
+    color: '#FFFDFB',
+    fontSize: 11,
+    fontWeight: '600',
+  },
+  btnPrimary: {
+    backgroundColor: Colors.light.gold,
+    alignItems: 'center',
+    justifyContent: 'center',
+    boxShadow: '0 4px 12px rgba(197, 155, 39, 0.15)',
+  },
+  btnPrimaryPressed: {
+    transform: [{ scale: 0.98 }],
+    backgroundColor: '#A8811F',
+  },
+  btnText: {
+    color: '#FFFDFB',
+    fontSize: 12,
+    fontWeight: '600',
   },
 });
