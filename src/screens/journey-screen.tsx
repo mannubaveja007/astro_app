@@ -149,7 +149,8 @@ export function JourneyScreenView({
                 </Text>
               </View>
               <View style={styles.lockStatusBadge}>
-                <Text style={styles.lockStatusText}>🔒 Tomorrow</Text>
+                <Ionicons name="lock-closed" size={8} color={Colors.light.gold} style={{ marginRight: 2 }} />
+                <Text style={styles.lockStatusText}>Tomorrow</Text>
               </View>
             </View>
           )}
@@ -164,10 +165,54 @@ export function JourneyScreenView({
               <Text style={styles.dayTitleLocked}>Signs your paths are aligning</Text>
             </View>
             <View style={styles.lockStatusBadge}>
-              <Text style={styles.lockStatusText}>🔒 2 days</Text>
+              <Ionicons name="lock-closed" size={8} color={Colors.light.gold} style={{ marginRight: 2 }} />
+              <Text style={styles.lockStatusText}>2 days</Text>
             </View>
           </View>
         </Animated.View>
+      </View>
+
+      {/* Roadmap Card */}
+      <View style={[styles.card, styles.roadmapCard]}>
+        <LinearGradient
+          colors={['#FFFDFB', '#FAF7F2']}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 1 }}
+          style={StyleSheet.absoluteFill}
+        />
+        <Text style={styles.roadmapLabel}>30-DAY JOURNEY ROADMAP</Text>
+        <Text style={styles.roadmapTitle}>Your Spiritual Milestones</Text>
+        <View style={styles.roadmapDivider} />
+        
+        <View style={styles.roadmapItem}>
+          <View style={styles.roadmapItemIconContainer}>
+            <Text style={styles.roadmapEmoji}>💫</Text>
+          </View>
+          <View style={styles.roadmapTextCol}>
+            <Text style={styles.roadmapItemTitle}>Self Alignment (Days 1-10)</Text>
+            <Text style={styles.roadmapItemSub}>Clear blockages, establish daily intention, and sync cosmic numbers.</Text>
+          </View>
+        </View>
+        
+        <View style={styles.roadmapItem}>
+          <View style={styles.roadmapItemIconContainer}>
+            <Text style={styles.roadmapEmoji}>🪐</Text>
+          </View>
+          <View style={styles.roadmapTextCol}>
+            <Text style={styles.roadmapItemTitle}>Synastry Transits (Days 11-20)</Text>
+            <Text style={styles.roadmapItemSub}>Explore astrology charts, planetary aspects, and soulmate attributes.</Text>
+          </View>
+        </View>
+
+        <View style={styles.roadmapItem}>
+          <View style={styles.roadmapItemIconContainer}>
+            <Text style={styles.roadmapEmoji}>✨</Text>
+          </View>
+          <View style={styles.roadmapTextCol}>
+            <Text style={styles.roadmapItemTitle}>Connection &amp; Harmony (Days 21-30)</Text>
+            <Text style={styles.roadmapItemSub}>Synchronize dream channels, calculate alignment dates, and finalize sketch.</Text>
+          </View>
+        </View>
       </View>
 
     </Animated.ScrollView>
