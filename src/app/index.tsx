@@ -25,6 +25,7 @@ import Animated, {
   FadeIn,
   FadeInDown,
   Layout,
+  SharedValue,
 } from 'react-native-reanimated';
 
 // Custom icons using Lucide-style SVG shapes/Ionicons
@@ -162,7 +163,7 @@ function CelestialBackground() {
   }));
 
   return (
-    <View style={StyleSheet.absoluteFillObject} pointerEvents="none">
+    <View style={StyleSheet.absoluteFill} pointerEvents="none">
       {/* Astrological Axes Grid */}
       <View style={[styles.axisLine, styles.axisHorizontal]} />
       <View style={[styles.axisLine, styles.axisVertical]} />
@@ -217,45 +218,49 @@ const PARTICLES = Array.from({ length: PARTICLE_COUNT }, (_, i) => {
   };
 });
 
-interface ParticleBurstProps {
-  progress: Animated.SharedValue<number>;
+interface BurstParticleItemProps {
+  progress: SharedValue<number>;
+  p: typeof PARTICLES[number];
 }
 
-function ParticleBurst({ progress }: ParticleBurstProps) {
-  return (
-    <View style={StyleSheet.absoluteFillObject} pointerEvents="none">
-      {PARTICLES.map((p) => {
-        const animatedStyle = useAnimatedStyle(() => {
-          const val = progress.value;
-          if (val === 0 || val === 1) {
-            return { opacity: 0, transform: [{ translateX: 0 }, { translateY: 0 }, { scale: 0 }] };
-          }
-          const tx = p.dx * val;
-          const ty = p.dy * val;
-          // Fade out towards the end
-          const opacity = val < 0.2 ? val / 0.2 : 1 - (val - 0.2) / 0.8;
-          const scale = 1.5 - val * 0.5;
-          return {
-            transform: [{ translateX: tx }, { translateY: ty }, { scale }],
-            opacity,
-          };
-        });
+function BurstParticleItem({ progress, p }: BurstParticleItemProps) {
+  const animatedStyle = useAnimatedStyle(() => {
+    const val = progress.value;
+    if (val === 0 || val === 1) {
+      return { opacity: 0, transform: [{ translateX: 0 }, { translateY: 0 }, { scale: 0 }] };
+    }
+    const tx = p.dx * val;
+    const ty = p.dy * val;
+    // Fade out towards the end
+    const opacity = val < 0.2 ? val / 0.2 : 1 - (val - 0.2) / 0.8;
+    const scale = 1.5 - val * 0.5;
+    return {
+      transform: [{ translateX: tx }, { translateY: ty }, { scale }],
+      opacity,
+    };
+  });
 
-        return (
-          <Animated.View
-            key={p.id}
-            style={[
-              styles.burstParticle,
-              {
-                width: p.size,
-                height: p.size,
-                borderRadius: p.size / 2,
-              },
-              animatedStyle,
-            ]}
-          />
-        );
-      })}
+  return (
+    <Animated.View
+      style={[
+        styles.burstParticle,
+        {
+          width: p.size,
+          height: p.size,
+          borderRadius: p.size / 2,
+        },
+        animatedStyle,
+      ]}
+    />
+  );
+}
+
+function ParticleBurst({ progress }: { progress: SharedValue<number> }) {
+  return (
+    <View style={StyleSheet.absoluteFill} pointerEvents="none">
+      {PARTICLES.map((p) => (
+        <BurstParticleItem key={p.id} progress={progress} p={p} />
+      ))}
     </View>
   );
 }
@@ -326,7 +331,7 @@ function TimerSegment({ value, label }: TimerSegmentProps) {
       <Animated.View style={[styles.segmentCard, animatedStyle]}>
         <LinearGradient
           colors={['#FFFDFB', '#FDFBF7']}
-          style={StyleSheet.absoluteFillObject}
+          style={StyleSheet.absoluteFill}
         />
         <Text style={styles.segmentNumber}>{value}</Text>
       </Animated.View>
@@ -510,15 +515,6 @@ export default function HomeScreen() {
   const animatedIndicatorStyle = useAnimatedStyle(() => ({
     transform: [{ translateX: tabIndicatorOffset.value }],
   }));
-
-  // Helper function to format timer
-  const formatTimer = (seconds: number) => {
-    const hrs = Math.floor(seconds / 3600);
-    const mins = Math.floor((seconds % 3600) / 60);
-    const secs = seconds % 60;
-    const pad = (n: number) => String(n).padStart(2, '0');
-    return `${pad(hrs)}:${pad(mins)}:${pad(secs)}`;
-  };
 
   // Trigger Expedite Action
   const triggerExpedite = () => {
@@ -2697,13 +2693,19 @@ const styles = StyleSheet.create({
   },
   bubbleUser: {
     backgroundColor: Colors.light.text,
+    borderTopLeftRadius: 16,
+    borderTopRightRadius: 16,
+    borderBottomLeftRadius: 16,
     borderBottomRightRadius: 2,
   },
   bubbleAgent: {
     backgroundColor: Colors.light.backgroundElement,
     borderWidth: 1,
     borderColor: Colors.light.border,
+    borderTopLeftRadius: 16,
+    borderTopRightRadius: 16,
     borderBottomLeftRadius: 2,
+    borderBottomRightRadius: 16,
   },
   bubbleUserText: {
     color: Colors.light.backgroundElement,
@@ -2721,11 +2723,19 @@ const styles = StyleSheet.create({
     color: Colors.light.textSecondary,
   },
   typingIndicatorRow: {
-    paddingVertical: 8,
-    paddingHorizontal: 16,
-    backgroundColor: '#FAF8F5',
-    borderTopWidth: 1,
-    borderTopColor: Colors.light.border,
+    position: 'absolute',
+    left: 16,
+    right: 16,
+    paddingVertical: 6,
+    paddingHorizontal: 12,
+    backgroundColor: 'rgba(255, 253, 251, 0.95)',
+    borderWidth: 1,
+    borderColor: Colors.light.borderGlow,
+    borderRadius: 20,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    boxShadow: '0 2px 8px rgba(0, 0, 0, 0.05)',
   },
   typingText: {
     fontSize: 11,
@@ -2733,10 +2743,13 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   chatComposer: {
-    height: 56,
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    height: 64,
     borderTopWidth: 1,
     borderTopColor: Colors.light.border,
-    backgroundColor: Colors.light.backgroundElement,
     paddingHorizontal: 16,
     flexDirection: 'row',
     alignItems: 'center',
@@ -2756,8 +2769,7 @@ const styles = StyleSheet.create({
   btnSend: {
     height: 36,
     width: 36,
-    borderRadius: 12,
-    backgroundColor: Colors.light.text,
+    borderRadius: 18,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -2845,5 +2857,193 @@ const styles = StyleSheet.create({
   },
   tabTextActive: {
     color: Colors.light.violet,
+  },
+  btnSendActive: {
+    backgroundColor: Colors.light.violet,
+    boxShadow: '0 2px 6px rgba(108, 82, 153, 0.2)',
+  },
+  btnSendDisabled: {
+    backgroundColor: Colors.light.textSecondary,
+  },
+  typingDot: {
+    width: 6,
+    height: 6,
+    borderRadius: 3,
+    backgroundColor: Colors.light.gold,
+  },
+  axisLine: {
+    position: 'absolute',
+    backgroundColor: 'rgba(197, 155, 39, 0.025)',
+  },
+  axisHorizontal: {
+    left: 0,
+    right: 0,
+    top: '50%',
+    height: 1,
+  },
+  axisVertical: {
+    top: 0,
+    bottom: 0,
+    left: '50%',
+    width: 1,
+  },
+  axisDiag1: {
+    left: -100,
+    right: -100,
+    top: '50%',
+    height: 1,
+    transform: [{ rotate: '45deg' }],
+    borderStyle: 'dashed',
+    borderWidth: 0.5,
+    borderColor: 'rgba(108, 82, 153, 0.02)',
+    backgroundColor: 'transparent',
+  },
+  axisDiag2: {
+    left: -100,
+    right: -100,
+    top: '50%',
+    height: 1,
+    transform: [{ rotate: '-45deg' }],
+    borderStyle: 'dashed',
+    borderWidth: 0.5,
+    borderColor: 'rgba(108, 82, 153, 0.02)',
+    backgroundColor: 'transparent',
+  },
+  celestialRing: {
+    position: 'absolute',
+    alignSelf: 'center',
+    top: '50%',
+    borderWidth: 0.75,
+    borderColor: 'rgba(197, 155, 39, 0.04)',
+    borderStyle: 'solid',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  ringOuter: {
+    width: 420,
+    height: 420,
+    borderRadius: 210,
+    marginTop: -210,
+    borderColor: 'rgba(197, 155, 39, 0.05)',
+  },
+  ringMid: {
+    width: 320,
+    height: 320,
+    borderRadius: 160,
+    marginTop: -160,
+    borderStyle: 'dashed',
+    borderColor: 'rgba(108, 82, 153, 0.04)',
+  },
+  ringInner: {
+    width: 220,
+    height: 220,
+    borderRadius: 110,
+    marginTop: -110,
+    borderColor: 'rgba(197, 155, 39, 0.03)',
+  },
+  ringNorthStar: {
+    position: 'absolute',
+    top: -6,
+    alignItems: 'center',
+  },
+  ringSouthStar: {
+    position: 'absolute',
+    bottom: -6,
+    alignItems: 'center',
+  },
+  ringEastStar: {
+    position: 'absolute',
+    right: -6,
+    justifyContent: 'center',
+  },
+  ringWestStar: {
+    position: 'absolute',
+    left: -6,
+    justifyContent: 'center',
+  },
+  constellationLabel: {
+    fontSize: 7.5,
+    fontWeight: '700',
+    color: 'rgba(197, 155, 39, 0.2)',
+    letterSpacing: 0.5,
+  },
+  axisLabelContainer: {
+    position: 'absolute',
+    inset: 0,
+  },
+  axisLabelText: {
+    position: 'absolute',
+    fontSize: 8,
+    fontWeight: '700',
+    color: 'rgba(122, 111, 102, 0.3)',
+    letterSpacing: 1,
+  },
+  burstParticle: {
+    position: 'absolute',
+    left: '50%',
+    top: '50%',
+    backgroundColor: Colors.light.gold,
+    shadowColor: Colors.light.gold,
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.8,
+    shadowRadius: 4,
+  },
+  activeNodeContainer: {
+    position: 'relative',
+    width: 26,
+    height: 26,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  nodeActivePulse: {
+    position: 'absolute',
+    width: 38,
+    height: 38,
+    borderRadius: 19,
+    borderWidth: 2,
+    borderColor: Colors.light.gold,
+    backgroundColor: 'rgba(197, 155, 39, 0.15)',
+  },
+  timerContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    marginVertical: 16,
+  },
+  timerSeparator: {
+    fontFamily: 'ui-serif',
+    fontSize: 24,
+    fontWeight: '700',
+    color: Colors.light.gold,
+    marginTop: -12,
+  },
+  segmentWrapper: {
+    alignItems: 'center',
+    gap: 4,
+  },
+  segmentCard: {
+    width: 64,
+    height: 52,
+    borderRadius: 12,
+    borderWidth: 1.5,
+    borderColor: Colors.light.borderGlow,
+    alignItems: 'center',
+    justifyContent: 'center',
+    overflow: 'hidden',
+    boxShadow: '0 2px 8px rgba(197, 155, 39, 0.06)',
+  },
+  segmentNumber: {
+    fontFamily: 'ui-serif',
+    fontSize: 24,
+    fontWeight: '700',
+    color: Colors.light.text,
+    fontVariant: ['tabular-nums'],
+  },
+  segmentLabel: {
+    fontSize: 8,
+    fontWeight: '700',
+    color: Colors.light.textSecondary,
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
   },
 });
