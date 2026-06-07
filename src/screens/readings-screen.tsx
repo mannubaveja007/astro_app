@@ -6,6 +6,7 @@ import * as Haptics from 'expo-haptics';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Colors } from '@/constants/theme';
 import { LOCKED_READINGS } from '@/constants/astro-data';
+import { useLayoutConstants } from '@/constants/layout';
 
 interface ReadingsScreenProps {
   pastLifeExpanded: boolean;
@@ -18,10 +19,11 @@ export function ReadingsScreenView({
   setPastLifeExpanded,
   setActiveTab,
 }: ReadingsScreenProps) {
+  const { SCREEN_BOTTOM_PADDING } = useLayoutConstants();
   return (
     <Animated.ScrollView
       entering={FadeIn.duration(400)}
-      contentContainerStyle={styles.scrollContent}
+      contentContainerStyle={[styles.scrollContent, { paddingBottom: SCREEN_BOTTOM_PADDING }]}
       showsVerticalScrollIndicator={false}>
       
       {/* Banner */}

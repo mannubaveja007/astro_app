@@ -7,6 +7,7 @@ import { Colors } from '@/constants/theme';
 import { TimerSegment } from '@/components/astro/animations/timer-segment';
 import { ParticleBurst } from '@/components/astro/animations/particle-burst';
 import { AvatarPulse } from '@/components/astro/animations/avatar-pulse';
+import { useLayoutConstants } from '@/constants/layout';
 
 interface HomeScreenProps {
   countdownSeconds: number;
@@ -23,10 +24,11 @@ export function HomeScreenView({
   countdownBurstProgress,
   setActiveTab,
 }: HomeScreenProps) {
+  const { SCREEN_BOTTOM_PADDING } = useLayoutConstants();
   return (
     <Animated.ScrollView
       entering={FadeIn.duration(400)}
-      contentContainerStyle={styles.scrollContent}
+      contentContainerStyle={[styles.scrollContent, { paddingBottom: SCREEN_BOTTOM_PADDING }]}
       showsVerticalScrollIndicator={false}>
       
       <LinearGradient

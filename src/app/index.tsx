@@ -23,7 +23,7 @@ import { Colors } from '@/constants/theme';
 import { INITIAL_CHAT_HISTORIES, ChatHistories } from '@/constants/astro-data';
 import { CelestialBackground } from '@/components/astro/animations/celestial-background';
 import { Star } from '@/components/astro/animations/star';
-import { useLayoutConstants } from '@/constants/layout';
+import { useLayoutConstants, TAB_BAR_BASE_HEIGHT } from '@/constants/layout';
 
 // Screens
 import { HomeScreenView } from '@/screens/home-screen';
@@ -346,7 +346,7 @@ export default function HomeScreen() {
       {/* ==================================================== */}
       {/* PERSISTENT BOTTOM NAVIGATION BAR */}
       {/* ==================================================== */}
-      <View style={[styles.bottomBar, { paddingBottom: insets.bottom, height: 52 + insets.bottom }]}>
+      <View style={[styles.bottomBar, { paddingBottom: insets.bottom, height: TAB_BAR_TOTAL_HEIGHT }]}>
         {/* Home Tab */}
         <Pressable
           onPress={() => {
@@ -354,12 +354,13 @@ export default function HomeScreen() {
             setActiveTab('home');
           }}
           style={styles.tabItem}>
-          {activeTab === 'home' && <View style={styles.activeDot} />}
-          <Ionicons
-            name={activeTab === 'home' ? 'home' : 'home-outline'}
-            size={20}
-            color={activeTab === 'home' ? Colors.light.violet : Colors.light.textSecondary}
-          />
+          <View style={[styles.iconContainer, activeTab === 'home' && styles.iconContainerActive]}>
+            <Ionicons
+              name={activeTab === 'home' ? 'home' : 'home-outline'}
+              size={20}
+              color={activeTab === 'home' ? Colors.light.violet : Colors.light.textSecondary}
+            />
+          </View>
           <Text style={[styles.tabText, activeTab === 'home' && styles.tabTextActive]}>Home</Text>
         </Pressable>
 
@@ -370,12 +371,13 @@ export default function HomeScreen() {
             setActiveTab('readings');
           }}
           style={styles.tabItem}>
-          {activeTab === 'readings' && <View style={styles.activeDot} />}
-          <Ionicons
-            name={activeTab === 'readings' ? 'book' : 'book-outline'}
-            size={20}
-            color={activeTab === 'readings' ? Colors.light.violet : Colors.light.textSecondary}
-          />
+          <View style={[styles.iconContainer, activeTab === 'readings' && styles.iconContainerActive]}>
+            <Ionicons
+              name={activeTab === 'readings' ? 'book' : 'book-outline'}
+              size={20}
+              color={activeTab === 'readings' ? Colors.light.violet : Colors.light.textSecondary}
+            />
+          </View>
           <Text style={[styles.tabText, activeTab === 'readings' && styles.tabTextActive]}>Readings</Text>
         </Pressable>
 
@@ -386,12 +388,13 @@ export default function HomeScreen() {
             setActiveTab('chat');
           }}
           style={styles.tabItem}>
-          {activeTab === 'chat' && <View style={styles.activeDot} />}
-          <Ionicons
-            name={activeTab === 'chat' ? 'chatbubble-ellipses' : 'chatbubble-ellipses-outline'}
-            size={20}
-            color={activeTab === 'chat' ? Colors.light.violet : Colors.light.textSecondary}
-          />
+          <View style={[styles.iconContainer, activeTab === 'chat' && styles.iconContainerActive]}>
+            <Ionicons
+              name={activeTab === 'chat' ? 'chatbubble-ellipses' : 'chatbubble-ellipses-outline'}
+              size={20}
+              color={activeTab === 'chat' ? Colors.light.violet : Colors.light.textSecondary}
+            />
+          </View>
           <Text style={[styles.tabText, activeTab === 'chat' && styles.tabTextActive]}>Chat</Text>
         </Pressable>
 
@@ -402,12 +405,13 @@ export default function HomeScreen() {
             setActiveTab('journey');
           }}
           style={styles.tabItem}>
-          {activeTab === 'journey' && <View style={styles.activeDot} />}
-          <Ionicons
-            name={activeTab === 'journey' ? 'triangle' : 'triangle-outline'}
-            size={20}
-            color={activeTab === 'journey' ? Colors.light.violet : Colors.light.textSecondary}
-          />
+          <View style={[styles.iconContainer, activeTab === 'journey' && styles.iconContainerActive]}>
+            <Ionicons
+              name={activeTab === 'journey' ? 'triangle' : 'triangle-outline'}
+              size={20}
+              color={activeTab === 'journey' ? Colors.light.violet : Colors.light.textSecondary}
+            />
+          </View>
           <Text style={[styles.tabText, activeTab === 'journey' && styles.tabTextActive]}>Guides</Text>
         </Pressable>
 
@@ -418,12 +422,13 @@ export default function HomeScreen() {
             setActiveTab('you');
           }}
           style={styles.tabItem}>
-          {activeTab === 'you' && <View style={styles.activeDot} />}
-          <Ionicons
-            name={activeTab === 'you' ? 'person' : 'person-outline'}
-            size={20}
-            color={activeTab === 'you' ? Colors.light.violet : Colors.light.textSecondary}
-          />
+          <View style={[styles.iconContainer, activeTab === 'you' && styles.iconContainerActive]}>
+            <Ionicons
+              name={activeTab === 'you' ? 'person' : 'person-outline'}
+              size={20}
+              color={activeTab === 'you' ? Colors.light.violet : Colors.light.textSecondary}
+            />
+          </View>
           <Text style={[styles.tabText, activeTab === 'you' && styles.tabTextActive]}>You</Text>
         </Pressable>
       </View>
@@ -610,28 +615,27 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    height: 52,
-    paddingTop: 6,
-    paddingBottom: 2,
-    position: 'relative',
-    zIndex: 10,
+    height: TAB_BAR_BASE_HEIGHT,
+  },
+  iconContainer: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'transparent',
+  },
+  iconContainerActive: {
+    backgroundColor: 'rgba(108, 82, 153, 0.08)',
   },
   tabText: {
     fontSize: 10,
     fontWeight: '500',
     color: Colors.light.textSecondary,
-    marginTop: 1,
+    marginTop: 2,
   },
   tabTextActive: {
     color: Colors.light.violet,
     fontWeight: '600',
-  },
-  activeDot: {
-    position: 'absolute',
-    top: 2,
-    width: 4,
-    height: 4,
-    borderRadius: 2,
-    backgroundColor: Colors.light.violet,
   },
 });
