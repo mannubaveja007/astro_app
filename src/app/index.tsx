@@ -1120,10 +1120,7 @@ export default function HomeScreen() {
             {/* Journey steps with connecting path */}
             <View style={styles.journeyStepsContainer}>
               <View style={styles.journeyTimelinePath} />
-
-              <Text style={styles.journeyStepsLabel}>YOUR DAILY JOURNEY</Text>
-
-              <View style={styles.journeyDaysStack}>
+              <Animated.View layout={Layout.springify()} style={styles.journeyDaysStack}>
                 {/* Day 1: Completed */}
                 <View style={styles.dayCardCompleted}>
                   <View style={styles.nodeCompleted}>
@@ -1147,59 +1144,73 @@ export default function HomeScreen() {
                 </View>
 
                 {/* Day 3: Completed or Active */}
-                {day3Completed ? (
-                  <View style={styles.dayCardCompleted}>
-                    <View style={styles.nodeCompleted}>
-                      <Ionicons name="checkmark" size={12} color={Colors.light.violet} />
+                <View style={{ position: 'relative' }}>
+                  {day3Completed ? (
+                    <Animated.View entering={FadeIn.duration(400)} style={styles.dayCardCompleted}>
+                      <View style={styles.nodeCompleted}>
+                        <Ionicons name="checkmark" size={12} color={Colors.light.violet} />
+                      </View>
+                      <View style={styles.dayTextGroup}>
+                        <Text style={styles.dayLabel}>Day 3</Text>
+                        <Text style={styles.dayTitleCompleted}>{"Recognize the love you're calling in"}</Text>
+                      </View>
+                    </Animated.View>
+                  ) : (
+                    <View style={styles.dayCardActive}>
+                      <ActiveNode>
+                        <Text style={styles.nodeActiveText}>3</Text>
+                      </ActiveNode>
+                      <View style={styles.dayTextGroup}>
+                        <Text style={styles.dayLabelActive}>Day 3</Text>
+                        <Text style={styles.dayTitleActive}>{"Recognize the love you're calling in"}</Text>
+                      </View>
+                      <Pressable
+                        onPress={() => {
+                          Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                          setDayModalVisible(true);
+                        }}
+                        style={({ pressed }) => [styles.btnPrimary, styles.dayOpenBtn, pressed && styles.btnPrimaryPressed]}>
+                        <Text style={styles.btnTextCompact}>Open →</Text>
+                      </Pressable>
                     </View>
-                    <View style={styles.dayTextGroup}>
-                      <Text style={styles.dayLabel}>Day 3</Text>
-                      <Text style={styles.dayTitleCompleted}>{"Recognize the love you're calling in"}</Text>
-                    </View>
-                  </View>
-                ) : (
-                  <View style={styles.dayCardActive}>
-                    <View style={styles.nodeActive}>
-                      <Text style={styles.nodeActiveText}>3</Text>
-                    </View>
-                    <View style={styles.dayTextGroup}>
-                      <Text style={styles.dayLabelActive}>Day 3</Text>
-                      <Text style={styles.dayTitleActive}>{"Recognize the love you're calling in"}</Text>
-                    </View>
-                    <Pressable
-                      onPress={() => {
-                        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-                        setDayModalVisible(true);
-                      }}
-                      style={({ pressed }) => [styles.btnPrimary, styles.dayOpenBtn, pressed && styles.btnPrimaryPressed]}>
-                      <Text style={styles.btnTextCompact}>Open →</Text>
-                    </Pressable>
-                  </View>
-                )}
+                  )}
+                  <ParticleBurst progress={journeyBurstProgress} />
+                </View>
 
                 {/* Day 4: Locked or unlocked based on Day 3 */}
-                <View style={day3Completed ? styles.dayCardActive : styles.dayCardLocked}>
-                  <View style={day3Completed ? styles.nodeActive : styles.nodeLocked}>
-                    <Text style={day3Completed ? styles.nodeActiveText : styles.nodeLockedText}>4</Text>
-                  </View>
-                  <View style={styles.dayTextGroup}>
-                    <Text style={day3Completed ? styles.dayLabelActive : styles.dayLabel}>Day 4</Text>
-                    <Text style={day3Completed ? styles.dayTitleActive : styles.dayTitleLocked}>
-                      What your soulmate may be feeling
-                    </Text>
-                  </View>
-                  {day3Completed ? (
+                {day3Completed ? (
+                  <Animated.View entering={FadeInDown.springify().mass(0.8)} style={styles.dayCardActive}>
+                    <ActiveNode>
+                      <Text style={styles.nodeActiveText}>4</Text>
+                    </ActiveNode>
+                    <View style={styles.dayTextGroup}>
+                      <Text style={styles.dayLabelActive}>Day 4</Text>
+                      <Text style={styles.dayTitleActive}>
+                        What your soulmate may be feeling
+                      </Text>
+                    </View>
                     <Pressable
                       onPress={() => Alert.alert('Day 4 Reflection', 'Journaling opens tomorrow!')}
                       style={({ pressed }) => [styles.btnPrimary, styles.dayOpenBtn, pressed && styles.btnPrimaryPressed]}>
                       <Text style={styles.btnTextCompact}>Open →</Text>
                     </Pressable>
-                  ) : (
+                  </Animated.View>
+                ) : (
+                  <View style={styles.dayCardLocked}>
+                    <View style={styles.nodeLocked}>
+                      <Text style={styles.nodeLockedText}>4</Text>
+                    </View>
+                    <View style={styles.dayTextGroup}>
+                      <Text style={styles.dayLabel}>Day 4</Text>
+                      <Text style={styles.dayTitleLocked}>
+                        What your soulmate may be feeling
+                      </Text>
+                    </View>
                     <View style={styles.lockStatusBadge}>
                       <Text style={styles.lockStatusText}>🔒 Tomorrow</Text>
                     </View>
-                  )}
-                </View>
+                  </View>
+                )}
 
                 {/* Day 5: Locked */}
                 <View style={styles.dayCardLocked}>
@@ -1212,6 +1223,9 @@ export default function HomeScreen() {
                   </View>
                   <View style={styles.lockStatusBadge}>
                     <Text style={styles.lockStatusText}>🔒 2 days</Text>
+                  </View>
+                </View>
+              </Animated.View>🔒 2 days</Text>
                   </View>
                 </View>
 
