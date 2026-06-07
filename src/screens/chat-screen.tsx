@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, Text, Pressable, ScrollView, TextInput, StyleSheetProperties } from 'react-native';
+import { StyleSheet, View, Text, Pressable, ScrollView, TextInput } from 'react-native';
 import Animated, { FadeIn, FadeInDown } from 'react-native-reanimated';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -629,5 +629,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     fontSize: 11.5,
     color: Colors.light.text,
+  },
+  btnTextCompact: {
+    color: Colors.light.backgroundElement,
+    fontSize: 11,
+    fontWeight: '600',
   },
 });

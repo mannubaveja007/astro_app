@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import React, { useEffect } from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import Animated, {
   useSharedValue,
@@ -8,7 +7,6 @@ import Animated, {
   withTiming,
   Easing,
 } from 'react-native-reanimated';
-import { Colors } from '@/constants/theme';
 
 export function CelestialBackground() {
   const rotation1 = useSharedValue(0);
