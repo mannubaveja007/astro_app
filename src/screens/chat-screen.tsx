@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, View, Text, Pressable, ScrollView, TextInput } from 'react-native';
 import Animated, { FadeIn, FadeInDown } from 'react-native-reanimated';
-import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import { BlurView } from 'expo-blur';
 import { Ionicons } from '@expo/vector-icons';
@@ -10,6 +10,7 @@ import { Colors } from '@/constants/theme';
 import { ChatHistories } from '@/constants/astro-data';
 import { AnimatedSendButton } from '@/components/astro/animations/animated-send-button';
 import { TypingDot } from '@/components/astro/animations/typing-dot';
+import { useLayoutConstants } from '@/constants/layout';
 
 interface ChatScreenProps {
   chatHistories: ChatHistories;
@@ -38,12 +39,12 @@ export function ChatScreenView({
   chatScrollViewRef,
   setActiveTab,
 }: ChatScreenProps) {
-  const insets = useSafeAreaInsets();
+  const { insets, SCREEN_BOTTOM_PADDING } = useLayoutConstants();
 
   return (
     <Animated.ScrollView
       entering={FadeIn.duration(400)}
-      contentContainerStyle={styles.scrollContent}
+      contentContainerStyle={[styles.scrollContent, { paddingBottom: SCREEN_BOTTOM_PADDING }]}
       showsVerticalScrollIndicator={false}>
 
       {/* AI Assistant Promo */}

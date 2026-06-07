@@ -7,6 +7,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Colors } from '@/constants/theme';
 import { ActiveNode } from '@/components/astro/animations/active-node';
 import { ParticleBurst } from '@/components/astro/animations/particle-burst';
+import { useLayoutConstants } from '@/constants/layout';
 
 interface JourneyScreenProps {
   journeyProgress: number;
@@ -23,10 +24,11 @@ export function JourneyScreenView({
   setDayModalVisible,
   journeyBurstProgress,
 }: JourneyScreenProps) {
+  const { SCREEN_BOTTOM_PADDING } = useLayoutConstants();
   return (
     <Animated.ScrollView
       entering={FadeIn.duration(400)}
-      contentContainerStyle={styles.scrollContent}
+      contentContainerStyle={[styles.scrollContent, { paddingBottom: SCREEN_BOTTOM_PADDING }]}
       showsVerticalScrollIndicator={false}>
 
       <View style={styles.journeyHeader}>

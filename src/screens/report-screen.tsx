@@ -5,16 +5,18 @@ import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import * as Haptics from 'expo-haptics';
 import { Colors } from '@/constants/theme';
+import { useLayoutConstants } from '@/constants/layout';
 
 interface ReportScreenProps {
   setActiveTab: (tab: 'home' | 'readings' | 'chat' | 'journey' | 'you') => void;
 }
 
 export function ReportScreenView({ setActiveTab }: ReportScreenProps) {
+  const { SCREEN_BOTTOM_PADDING } = useLayoutConstants();
   return (
     <Animated.ScrollView
       entering={FadeIn.duration(400)}
-      contentContainerStyle={styles.scrollContent}
+      contentContainerStyle={[styles.scrollContent, { paddingBottom: SCREEN_BOTTOM_PADDING }]}
       showsVerticalScrollIndicator={false}>
       
       {/* User Profile Info */}
