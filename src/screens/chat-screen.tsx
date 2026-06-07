@@ -47,7 +47,13 @@ export function ChatScreenView({
       showsVerticalScrollIndicator={false}>
 
       {/* AI Assistant Promo */}
-      <View style={styles.chatAIPromo}>
+      <View style={[styles.chatAIPromo, { overflow: 'hidden', position: 'relative' }]}>
+        <LinearGradient
+          colors={['#FFFDFB', '#FAF8F4']}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 1 }}
+          style={StyleSheet.absoluteFill}
+        />
         <View style={styles.chatAILeft}>
           <View style={styles.aiAvatar}>
             <Text style={styles.aiAvatarText}>✨</Text>
@@ -67,29 +73,36 @@ export function ChatScreenView({
             setChatDialogVisible(true);
           }}
           style={({ pressed }) => [styles.btnPrimary, styles.chatAIButton, pressed && styles.btnPrimaryPressed]}>
-          <Text style={styles.btnTextCompact}>Start chat →</Text>
+          <Text style={styles.btnTextCompactGold}>Start chat →</Text>
         </Pressable>
       </View>
 
-      {/* Relationship Sketch Card */}
-      <LinearGradient
-        colors={['#6C5299', '#4D337A']}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 1, y: 1 }}
-        style={styles.chatReadingPromo}>
+      {/* Relationship Sketch Card - Harmonized Light Theme */}
+      <View style={styles.chatReadingPromoContainer}>
+        <LinearGradient
+          colors={['#FFFDFB', '#F9F5FD']}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 1 }}
+          style={StyleSheet.absoluteFill}
+        />
         <View style={styles.promoFlex}>
           <View style={styles.promoTextCol}>
-            <Text style={styles.promoEmoji}>🔮</Text>
+            <View style={styles.promoHeaderRow}>
+              <Text style={styles.promoEmoji}>🔮</Text>
+              <View style={styles.promoBadge}>
+                <Text style={styles.promoBadgeText}>Soulmate</Text>
+              </View>
+            </View>
             <Text style={styles.promoTitle}>Soulmate Sketch &amp; Relationship Reading</Text>
             <Text style={styles.promoSub}>{"Your soul's love portrait"}</Text>
           </View>
           <Pressable
             onPress={() => setActiveTab('readings')}
-            style={({ pressed }) => [styles.btnSecondary, styles.promoBtn, pressed && { backgroundColor: 'rgba(255,255,255,0.9)' }]}>
+            style={({ pressed }) => [styles.btnPrimary, styles.promoBtn, pressed && styles.promoBtnPressed]}>
             <Text style={styles.promoBtnText}>View results</Text>
           </Pressable>
         </View>
-      </LinearGradient>
+      </View>
 
       {/* Conversations list */}
       <View style={styles.sectionContainer}>
@@ -117,6 +130,7 @@ export function ChatScreenView({
                 {chatHistories.alyssa[chatHistories.alyssa.length - 1].text}
               </Text>
             </View>
+            <Ionicons name="chevron-forward" size={14} color={Colors.light.textSecondary} style={{ alignSelf: 'center', opacity: 0.7 }} />
           </Pressable>
 
           {/* Astro thread */}
@@ -144,8 +158,18 @@ export function ChatScreenView({
                 </View>
               </View>
             </View>
+            <Ionicons name="chevron-forward" size={14} color={Colors.light.textSecondary} style={{ alignSelf: 'center', opacity: 0.7 }} />
           </Pressable>
         </View>
+      </View>
+
+      {/* Cosmic Wisdom Card to fill the empty space */}
+      <View style={styles.wisdomCard}>
+        <Text style={styles.wisdomIcon}>✦</Text>
+        <Text style={styles.wisdomText}>
+          {"\"The stars do not pull us, they guide us. In silence, the soul hears the whisper of the cosmos.\""}
+        </Text>
+        <Text style={styles.wisdomAuthor}>· Daily Astro Tip ·</Text>
       </View>
 
       {/* Floating Modal dialogue */}
