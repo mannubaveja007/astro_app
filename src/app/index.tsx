@@ -1225,11 +1225,7 @@ export default function HomeScreen() {
                     <Text style={styles.lockStatusText}>🔒 2 days</Text>
                   </View>
                 </View>
-              </Animated.View>🔒 2 days</Text>
-                  </View>
-                </View>
-
-              </View>
+              </Animated.View>
             </View>
 
           </Animated.ScrollView>
@@ -1341,61 +1337,78 @@ export default function HomeScreen() {
               </View>
 
               {/* Message History View */}
-              <ScrollView
-                contentContainerStyle={styles.chatScrollContent}
-                ref={(ref) => ref?.scrollToEnd({ animated: true })}
-                showsVerticalScrollIndicator={false}>
-                {chatHistories[activeChatAgent].map((msg, idx) => (
-                  <View
-                    key={idx}
-                    style={[
-                      styles.chatBubbleRow,
-                      msg.sender === 'user' ? styles.bubbleUserRow : styles.bubbleAgentRow,
-                    ]}>
-                    {msg.sender !== 'user' && (
-                      <View style={styles.bubbleAvatar}>
-                        <Text style={styles.bubbleAvatarText}>
-                          {activeChatAgent === 'alyssa' ? '🌙' : '✨'}
-                        </Text>
-                      </View>
-                    )}
-                    <View
+              <View style={{ flex: 1, position: 'relative' }}>
+                <ScrollView
+                  ref={chatScrollViewRef}
+                  onContentSizeChange={() => chatScrollViewRef.current?.scrollToEnd({ animated: true })}
+                  contentContainerStyle={[
+                    styles.chatScrollContent,
+                    { paddingBottom: insets.bottom > 0 ? insets.bottom + 76 : 84 }
+                  ]}
+                  showsVerticalScrollIndicator={false}>
+                  {chatHistories[activeChatAgent].map((msg, idx) => (
+                    <Animated.View
+                      entering={FadeInDown.springify().mass(0.8).damping(14)}
+                      key={idx}
                       style={[
-                        styles.bubbleContent,
-                        msg.sender === 'user' ? styles.bubbleUser : styles.bubbleAgent,
+                        styles.chatBubbleRow,
+                        msg.sender === 'user' ? styles.bubbleUserRow : styles.bubbleAgentRow,
                       ]}>
-                      <Text style={msg.sender === 'user' ? styles.bubbleUserText : styles.bubbleAgentText}>
-                        {msg.text}
-                      </Text>
-                      <Text style={styles.bubbleTime}>{msg.time}</Text>
-                    </View>
-                  </View>
-                ))}
-              </ScrollView>
+                      {msg.sender !== 'user' && (
+                        <View style={styles.bubbleAvatar}>
+                          <Text style={styles.bubbleAvatarText}>
+                            {activeChatAgent === 'alyssa' ? '🌙' : '✨'}
+                          </Text>
+                        </View>
+                      )}
+                      <View
+                        style={[
+                          styles.bubbleContent,
+                          msg.sender === 'user' ? styles.bubbleUser : styles.bubbleAgent,
+                        ]}>
+                        <Text style={msg.sender === 'user' ? styles.bubbleUserText : styles.bubbleAgentText}>
+                          {msg.text}
+                        </Text>
+                        <Text style={styles.bubbleTime}>{msg.time}</Text>
+                      </View>
+                    </Animated.View>
+                  ))}
+                </ScrollView>
 
-              {/* Typing indicator */}
-              {isTyping && (
-                <View style={styles.typingIndicatorRow}>
-                  <Text style={styles.typingText}>
-                    {activeChatAgent === 'alyssa' ? 'Alyssa is channeling…' : 'Astro is typing…'}
-                  </Text>
-                </View>
-              )}
+                {/* Typing indicator */}
+                {isTyping && (
+                  <Animated.View
+                    entering={FadeInDown.duration(200)}
+                    style={[
+                      styles.typingIndicatorRow,
+                      { bottom: insets.bottom > 0 ? insets.bottom + 68 : 76 }
+                    ]}
+                  >
+                    <TypingDot />
+                    <Text style={styles.typingText}>
+                      {activeChatAgent === 'alyssa' ? 'Alyssa is channeling…' : 'Astro is typing…'}
+                    </Text>
+                  </Animated.View>
+                )}
 
-              {/* Message Composer input */}
-              <View style={[styles.chatComposer, { paddingBottom: insets.bottom > 0 ? 0 : 8 }]}>
-                <TextInput
-                  value={inputText}
-                  onChangeText={setInputText}
-                  placeholder="Ask about your reading..."
-                  placeholderTextColor={Colors.light.textSecondary}
-                  style={styles.chatInput}
-                />
-                <Pressable
-                  onPress={handleSendMessage}
-                  style={({ pressed }) => [styles.btnSend, pressed && { opacity: 0.8 }]}>
-                  <Ionicons name="send" size={14} color="#FFFDFB" />
-                </Pressable>
+                {/* Message Composer input */}
+                <BlurView
+                  intensity={90}
+                  tint="light"
+                  style={[
+                    styles.chatComposer,
+                    { paddingBottom: insets.bottom > 0 ? insets.bottom : 8 }
+                  ]}
+                >
+                  <TextInput
+                    value={inputText}
+                    onChangeText={setInputText}
+                    placeholder="Ask about your reading..."
+                    placeholderTextColor={Colors.light.textSecondary}
+                    style={styles.chatInput}
+                  />
+                  <AnimatedSendButton text={inputText} onPress={handleSendMessage} />
+                </BlurView>
               </View>
             </View>
           </SafeAreaView>
