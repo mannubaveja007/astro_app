@@ -48,9 +48,9 @@ const STARS_LIST = Array.from({ length: STARS_COUNT }, (_, i) => ({
 
 export default function HomeScreen() {
   const insets = useSafeAreaInsets();
-  const [activeTab, setActiveTab] = useState<'home' | 'readings' | 'chat' | 'journey' | 'you'>('home');
+  const [activeTab, setActiveTab] = useState<'home' | 'readings' | 'chat' | 'journey' | 'you'>('chat');
   const [supportVisible, setSupportVisible] = useState(false);
-  const [chatDialogVisible, setChatDialogVisible] = useState(false);
+  const [chatDialogVisible, setChatDialogVisible] = useState(true);
   const [dayModalVisible, setDayModalVisible] = useState(false);
 
   // States
