@@ -15,7 +15,6 @@ import * as Haptics from 'expo-haptics';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
-  withSpring,
   withTiming,
   Easing,
   FadeIn,
@@ -68,10 +67,6 @@ export default function HomeScreen() {
   const [inputText, setInputText] = useState('');
   const [isTyping, setIsTyping] = useState(false);
 
-  // Layout Animation Variables
-  const tabPillWidth = (SCREEN_WIDTH - 24) / 5;
-  const tabIndicatorOffset = useSharedValue(0);
-
   // Particle bursts triggers
   const countdownBurstProgress = useSharedValue(0);
   const journeyBurstProgress = useSharedValue(0);
@@ -91,16 +86,6 @@ export default function HomeScreen() {
     return () => clearInterval(timer);
   }, []);
 
-  // Update Tab indicator offset when activeTab changes
-  useEffect(() => {
-    const tabIndices = { home: 0, readings: 1, chat: 2, journey: 3, you: 4 };
-    const idx = tabIndices[activeTab];
-    tabIndicatorOffset.value = withSpring(idx * tabPillWidth, { damping: 18, stiffness: 120 });
-  }, [activeTab, tabIndicatorOffset, tabPillWidth]);
-
-  const animatedIndicatorStyle = useAnimatedStyle(() => ({
-    transform: [{ translateX: tabIndicatorOffset.value }],
-  }));
 
   // Trigger Expedite Action
   const triggerExpedite = () => {
