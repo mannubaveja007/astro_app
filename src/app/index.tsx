@@ -23,6 +23,7 @@ import { Colors } from '@/constants/theme';
 import { INITIAL_CHAT_HISTORIES, ChatHistories } from '@/constants/astro-data';
 import { CelestialBackground } from '@/components/astro/animations/celestial-background';
 import { Star } from '@/components/astro/animations/star';
+import { useLayoutConstants } from '@/constants/layout';
 
 // Screens
 import { HomeScreenView } from '@/screens/home-screen';
@@ -43,8 +44,8 @@ const STARS_LIST = Array.from({ length: STARS_COUNT }, (_, i) => ({
 }));
 
 export default function HomeScreen() {
-  const insets = useSafeAreaInsets();
-  const [activeTab, setActiveTab] = useState<'home' | 'readings' | 'chat' | 'journey' | 'you'>('chat');
+  const { insets, TAB_BAR_TOTAL_HEIGHT } = useLayoutConstants();
+  const [activeTab, setActiveTab] = useState<'home' | 'readings' | 'chat' | 'journey' | 'you'>('home');
   const [supportVisible, setSupportVisible] = useState(false);
   const [chatDialogVisible, setChatDialogVisible] = useState(false);
   const [dayModalVisible, setDayModalVisible] = useState(false);
